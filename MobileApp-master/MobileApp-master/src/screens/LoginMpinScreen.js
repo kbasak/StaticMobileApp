@@ -3,7 +3,6 @@ import { View, TextInput, Text, Button, Image, Alert, StyleSheet, ImageBackgroun
 import Modal from "react-native-modal";
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import PrimaryButton from '../components/PrimaryButton';
-import { loginUser, authenticationMember } from '../util/Authentication';
 
 const LoginMpinScreen = ({ navigation }) => {
     const [userName, setUserName] = useState('');
@@ -14,13 +13,16 @@ const LoginMpinScreen = ({ navigation }) => {
     const [popupVisible, setpopupVisible] = useState(false);
 
     const hideModal = () => {
+        setMpin('');
+        setUserName('');
+        setPassword('');
         setpopupVisible(() => !popupVisible)
     };
 
     const staticpin = '12345';
     const userData = {
-        UserName: userName,
-        Password: password,
+        UserName: "inspira",
+        Password: "inspira",
         Referer: '',
     };
 
@@ -52,17 +54,17 @@ const LoginMpinScreen = ({ navigation }) => {
                 setpopupVisible(true);
             }
         } else {
-            try {
-                await authenticationMember(userData);
+            if (userName === userData.UserName && password === userData.Password) {
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'BottomTabStack' }],
                 });
-            } catch (error) {
+            } else {
                 setpopupVisible(true);
             }
         }
-    }; //------ the above code ensures that a logged in user won't be able to go back to login screen without logging out.
+    }
+    //------ the above code ensures that a logged in user won't be able to go back to login screen without logging out.
 
     return (
         <ImageBackground source={require('../images/Login_bg.jpg')}
@@ -82,7 +84,7 @@ const LoginMpinScreen = ({ navigation }) => {
                                 value={mpin}
                                 onChangeText={setMpin}
                                 keyboardType="numeric"
-                                maxLength={6}
+                                maxLength={5}
                                 secureTextEntry
                                 style={styles.input}
                             />
